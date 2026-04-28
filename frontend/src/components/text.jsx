@@ -1,5 +1,5 @@
 export default function Text({
-  as: Component = 'p', // p por padrão
+  as: Component = 'p', // o as eh para definir o tipo de elemento html que sera renderizado
   children,
   size = 'md',
   weight = 'normal',
@@ -45,14 +45,16 @@ export default function Text({
   );
 }
 
+// ex de implementacao:
+
 // <Text size="xl" weight="bold" color="pink">
-//   Olá queen
+//   oiiiii
 // </Text>
 
 // <Text as="h1" size="lg" weight="medium" color="blue">
-//   Título
+//   hum
 // </Text>
 
 // <Text className="underline">
-//   Texto com estilo extra
+//   sos
 // </Text>
