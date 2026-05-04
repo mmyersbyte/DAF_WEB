@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "sass": "^1.93.3",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vite-plugin-svgr": "^5.2.0"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
