@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import Text from '../components/text.jsx';
 
 export default function Login() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -16,69 +17,135 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // lógica de login aqui
-    navigate("/home");
+    // placeholder: futura integracao com POST /auth/login
+    navigate('/home');
   };
 
+  // classes compartilhadas dos inputs (Tailwind); estado invalido destaca borda em vermelho
+  const inputClassName = (field) =>
+    [
+      'w-full rounded-lg border px-3 py-2 font-sans text-gray-900 outline-none transition',
+      'placeholder:text-gray-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30',
+      errors[field] ? 'border-red-500' : 'border-gray-300',
+    ].join(' ');
+
   return (
-    <div
-      className="d-flex justify-content-center align-items-center vh-100 animate__animated animate__fadeInUp"
-      style={{
-        background: "linear-gradient(135deg, #6a5acd, #a6b1ff)", // gradiente roxo-azul
-      }}
-    >
-      <div
-        className="card shadow-lg border-0 p-4"
-        style={{
-          maxWidth: "400px",
-          width: "100%",
-          borderRadius: "20px", // caixa arredondada
-          backgroundColor: "white", // fundo branco
-          color: "#333", // texto preto
-        }}
-      >
-        <h2 className="text-center mb-4 fw-bold">Login</h2>
+    /* Fundo em gradiente + centralizacao da cartao de login */
+    <div className='animate__animated animate__fadeInUp flex min-h-screen items-center justify-center bg-gradient-to-br from-violet-600 to-indigo-300 p-4'>
+      {/* Cartao branco: limite de largura alinhado ao layout anterior (~400px) */}
+      <div className='w-full max-w-md rounded-[20px] bg-white p-6 shadow-lg'>
+        {/* Titulo da pagina: Text como heading para semantica correta */}
+        <Text
+          as='h2'
+          size='xl'
+          weight='bold'
+          color='black'
+          className='mb-6 text-center'
+        >
+          Login
+        </Text>
+
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Email:</label>
+          {/* Campo email: label semantico via Text as="label" + htmlFor */}
+          <div className='mb-4'>
+            <Text
+              as='label'
+              htmlFor='login-email'
+              size='sm'
+              weight='medium'
+              color='black'
+              className='mb-1 block'
+            >
+              Email:
+            </Text>
             <input
-              type="email"
-              className={`form-control rounded-3 ${errors.email ? "is-invalid" : ""}`}
-              name="email"
+              id='login-email'
+              type='email'
+              name='email'
+              autoComplete='email'
               value={formData.email}
               onChange={handleChange}
+              className={inputClassName('email')}
+              aria-invalid={errors.email ? 'true' : undefined}
+              aria-describedby={errors.email ? 'login-email-error' : undefined}
             />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+            {errors.email && (
+              <Text
+                as='p'
+                id='login-email-error'
+                role='alert'
+                size='sm'
+                className='mt-1 !text-red-600'
+              >
+                {errors.email}
+              </Text>
+            )}
           </div>
-          <div className="mb-3">
-            <label className="form-label">Senha:</label>
+
+          {/* Campo senha */}
+          <div className='mb-4'>
+            <Text
+              as='label'
+              htmlFor='login-password'
+              size='sm'
+              weight='medium'
+              color='black'
+              className='mb-1 block'
+            >
+              Senha:
+            </Text>
             <input
-              type="password"
-              className={`form-control rounded-3 ${errors.password ? "is-invalid" : ""}`}
-              name="password"
+              id='login-password'
+              type='password'
+              name='password'
+              autoComplete='current-password'
               value={formData.password}
               onChange={handleChange}
+              className={inputClassName('password')}
+              aria-invalid={errors.password ? 'true' : undefined}
+              aria-describedby={
+                errors.password ? 'login-password-error' : undefined
+              }
             />
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+            {errors.password && (
+              <Text
+                as='p'
+                id='login-password-error'
+                role='alert'
+                size='sm'
+                className='mt-1 !text-red-600'
+              >
+                {errors.password}
+              </Text>
+            )}
           </div>
-          <div className="d-grid mb-3">
+
+          {/* Botao nativo (nao eh componente Button); estilo espelha o primario roxo do projeto */}
+          <div className='mb-2'>
             <button
-              type="submit"
-              className="btn fw-bold rounded-pill"
-              style={{ backgroundColor: "#6a5acd", color: "white" }}
+              type='submit'
+              className='w-full rounded-full bg-gradient-to-r from-violet-600 to-indigo-400 px-5 py-2.5 font-sans font-bold text-white shadow-md transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 active:brightness-95'
             >
               Entrar
             </button>
           </div>
         </form>
 
-        {/* Botão/link para cadastro */}
-        <p className="text-center mt-3">
-          Não tem conta?{" "}
-          <Link to="/register" style={{ color: "#6a5acd", fontWeight: "600" }}>
+        {/* Rodape: Text como paragrafo; Link do router para cadastro */}
+        <Text
+          as='p'
+          size='md'
+          color='black'
+          className='mt-6 text-center'
+        >
+          Não tem conta?{' '}
+          <Link
+            to='/register'
+            className='font-semibold text-violet-600 underline-offset-2 hover:underline'
+          >
             Cadastre-se
           </Link>
-        </p>
+        </Text>
       </div>
     </div>
   );
