@@ -5,6 +5,7 @@ export default function Text({
   weight = 'normal',
   color = 'gray',
   className = '',
+  fontFamily = 'var(--font-family)',
   ...props
 }) {
   const sizes = {
@@ -12,6 +13,12 @@ export default function Text({
     md: 'text-base',
     lg: 'text-lg',
     xl: 'text-xl',
+    '5xl': 'text-5xl',
+    '6xl': 'text-6xl',
+    '7xl': 'text-7xl',
+    '8xl': 'text-8xl',
+    '9xl': 'text-9xl',
+    '10xl': 'text-10xl',
   };
 
   const weights = {
@@ -33,6 +40,7 @@ export default function Text({
       ${weights[weight]}
       ${colors[color]}
       ${className}
+      ${fontFamily}
     `;
 
   return (

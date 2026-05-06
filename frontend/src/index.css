@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
 @import 'tailwindcss';
 @config "../tailwind.config.js";
+
 :root {
   /* 🔵 neutros */
   --color-bg: #ffffff;
   --color-text: #111827;
 
   /* 🟢 marca (tipo PicPay) */
-  --color-primary: #22c55e; /* verde principal */
+  --color-primary: #; /* verde principal */
   --color-primary-dark: #16a34a;
   --color-primary-light: #dcfce7;
 
@@ -19,4 +21,6 @@
 
   /* bordas */
   --color-border: #e5e7eb;
+
+  --font-family: 'Cairo', sans-serif;
 }
