@@ -13,14 +13,15 @@ export default function Text({
     md: 'text-base',
     lg: 'text-lg',
     xl: 'text-xl',
+    '2xl': 'text-2xl',
+    '3xl': 'text-3xl',
+    '4xl': 'text-4xl',
     '5xl': 'text-5xl',
     '6xl': 'text-6xl',
     '7xl': 'text-7xl',
     '8xl': 'text-8xl',
     '9xl': 'text-9xl',
-    '10xl': 'text-10xl',
   };
-
   const weights = {
     normal: 'font-normal',
     medium: 'font-medium',
@@ -28,12 +29,20 @@ export default function Text({
   };
 
   const colors = {
-    gray: 'text-gray-400',
-    black: 'text-black',
-    pink: 'text-pink-500',
-    blue: 'text-blue-500',
-  };
+    primary: 'text-[var(--color-primary)]',
+    primaryDark: 'text-[var(--color-primary-dark)]',
+    primaryLight: 'text-[var(--color-primary-light)]',
 
+    accent: 'text-[var(--color-accent)]',
+
+    success: 'text-[var(--color-success)]',
+    danger: 'text-[var(--color-danger)]',
+
+    text: 'text-[var(--color-text)]',
+    muted: 'text-gray-400',
+
+    border: 'text-[var(--color-border)]',
+  };
   const classes = `
       font-sans
       ${sizes[size]}

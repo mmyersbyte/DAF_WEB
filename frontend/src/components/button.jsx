@@ -1,5 +1,5 @@
 export default function Button({
-  as: Component = 'button', // as permite renderizar como <button> ou <a> (link com cara de botao)
+  as: Component = 'button', // as permite renderizar como <button> ou <a> (link com cara de botao
   children,
   size = 'md',
   variant = 'primary',
@@ -15,18 +15,18 @@ export default function Button({
 
   const variants = {
     primary:
-      'bg-gradient-to-r from-violet-600 to-indigo-400 text-white shadow-md hover:brightness-110 active:brightness-95',
+      'bg-[var(--color-primary)] text-white shadow-md hover:bg-[var(--color-primary-dark)] active:brightness-95',
     secondary:
-      'bg-gray-200 text-gray-800 hover:bg-gray-300 active:bg-gray-400',
+      'bg-[var(--color-primary-light)] text-[var(--color-text)] hover:brightness-95 active:brightness-90',
     outline:
-      'border-2 border-violet-600 bg-transparent text-violet-700 hover:bg-violet-50 active:bg-violet-100',
+      'border-2 border-[var(--color-primary)] bg-transparent text-[var(--color-primary-dark)] hover:bg-[var(--color-primary-light)] active:brightness-95',
     danger:
-      'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
+      'bg-[var(--color-danger)] text-white hover:brightness-95 active:brightness-90',
   };
 
   // classes comuns a todos os botoes: alinhamento, foco acessivel, estado disabled
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-full font-sans font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+    'inline-flex items-center justify-center gap-2 rounded-full font-sans font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
 
   const classes = `
       ${base}
@@ -36,11 +36,13 @@ export default function Button({
     `;
 
   // <a> nao aceita type="button"; por isso espalhamos type so quando for elemento button
-  const domProps =
-    Component === 'button' ? { type, ...props } : props;
+  const domProps = Component === 'button' ? { type, ...props } : props;
 
   return (
-    <Component className={classes.trim()} {...domProps}>
+    <Component
+      className={classes.trim()}
+      {...domProps}
+    >
       {children}
     </Component>
   );

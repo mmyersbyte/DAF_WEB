@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600&family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @config "../tailwind.config.js";
 
@@ -8,7 +8,7 @@
   --color-text: #111827;
 
   /* 🟢 marca (tipo PicPay) */
-  --color-primary: #; /* verde principal */
+  --color-primary: #22c55e; /* verde principal */
   --color-primary-dark: #16a34a;
   --color-primary-light: #dcfce7;
 
