@@ -1,1 +1,22 @@
 @import 'tailwindcss';
+@config "../tailwind.config.js";
+:root {
+  /* 🔵 neutros */
+  --color-bg: #ffffff;
+  --color-text: #111827;
+
+  /* 🟢 marca (tipo PicPay) */
+  --color-primary: #22c55e; /* verde principal */
+  --color-primary-dark: #16a34a;
+  --color-primary-light: #dcfce7;
+
+  /* 💰 destaque financeiro */
+  --color-accent: #f59e0b; /* amarelo dinheiro */
+
+  /* estados */
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+
+  /* bordas */
+  --color-border: #e5e7eb;
+}
