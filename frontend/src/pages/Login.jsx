@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Text from '../components/text.jsx';
+import Input from '../components/input.jsx';
+import Button from '../components/button.jsx';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -20,14 +22,6 @@ export default function Login() {
     // placeholder: futura integracao com POST /auth/login
     navigate('/home');
   };
-
-  // classes compartilhadas dos inputs (Tailwind); estado invalido destaca borda em vermelho
-  const inputClassName = (field) =>
-    [
-      'w-full rounded-lg border px-3 py-2 font-sans text-gray-900 outline-none transition',
-      'placeholder:text-gray-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30',
-      errors[field] ? 'border-red-500' : 'border-gray-300',
-    ].join(' ');
 
   return (
     /* Fundo em gradiente + centralizacao da cartao de login */
@@ -58,14 +52,14 @@ export default function Login() {
             >
               Email:
             </Text>
-            <input
+            <Input
               id='login-email'
               type='email'
               name='email'
               autoComplete='email'
               value={formData.email}
               onChange={handleChange}
-              className={inputClassName('email')}
+              variant={errors.email ? 'error' : 'default'}
               aria-invalid={errors.email ? 'true' : undefined}
               aria-describedby={errors.email ? 'login-email-error' : undefined}
             />
@@ -94,14 +88,14 @@ export default function Login() {
             >
               Senha:
             </Text>
-            <input
+            <Input
               id='login-password'
               type='password'
               name='password'
               autoComplete='current-password'
               value={formData.password}
               onChange={handleChange}
-              className={inputClassName('password')}
+              variant={errors.password ? 'error' : 'default'}
               aria-invalid={errors.password ? 'true' : undefined}
               aria-describedby={
                 errors.password ? 'login-password-error' : undefined
@@ -120,14 +114,15 @@ export default function Login() {
             )}
           </div>
 
-          {/* Botao nativo (nao eh componente Button); estilo espelha o primario roxo do projeto */}
+          {/* Submit via componente Button (variant primary alinhado ao design system) */}
           <div className='mb-2'>
-            <button
+            <Button
               type='submit'
-              className='w-full rounded-full bg-gradient-to-r from-violet-600 to-indigo-400 px-5 py-2.5 font-sans font-bold text-white shadow-md transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 active:brightness-95'
+              variant='primary'
+              className='w-full'
             >
               Entrar
-            </button>
+            </Button>
           </div>
         </form>
 
