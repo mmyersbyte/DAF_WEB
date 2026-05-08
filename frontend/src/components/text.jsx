@@ -1,31 +1,39 @@
 export default function Text({
-  as: Component = 'p', // o as eh para definir o tipo de elemento html que sera renderizado
+  as: Component = 'p',
   children,
   size = 'md',
   weight = 'normal',
-  color = 'text',
+  color = 'gray',
   className = '',
   fontFamily = 'var(--font-family)',
   ...props
 }) {
   const sizes = {
-    sm: 'text-sm leading-5',
-    md: 'text-base leading-6',
-    lg: 'text-lg leading-7',
-    xl: 'text-xl leading-8',
-    '2xl': 'text-2xl leading-9',
-    '3xl': 'text-3xl leading-tight',
-    '4xl': 'text-4xl leading-tight',
-    '5xl': 'text-5xl leading-tight',
-    '6xl': 'text-6xl leading-tight',
-    '7xl': 'text-7xl leading-tight',
-    '8xl': 'text-8xl leading-tight',
-    '9xl': 'text-9xl leading-tight',
+    // Escala semantica
+    caption: 'text-sm leading-5',
+    body: 'text-lg leading-7',
+    lead: 'text-xl leading-8',
+    title: 'text-3xl leading-10 tracking-tight',
+    subtitle: 'text-2xl leading-9 tracking-tight',
+    display: 'text-4xl leading-tight tracking-tight md:text-5xl',
+
+    // Escala tradicional (mantida por compatibilidade)
+    sm: 'text-base leading-6',
+    md: 'text-lg leading-7',
+    lg: 'text-xl leading-8',
+    xl: 'text-2xl leading-9',
+    '2xl': 'text-3xl leading-10',
+    '3xl': 'text-4xl leading-tight',
+    '4xl': 'text-5xl leading-tight',
+    '5xl': 'text-6xl leading-tight',
+    '6xl': 'text-7xl leading-none',
+    '7xl': 'text-8xl leading-none',
+    '8xl': 'text-9xl leading-none',
+    '9xl': 'text-9xl leading-none',
   };
   const weights = {
     normal: 'font-normal',
     medium: 'font-medium',
-    semibold: 'font-semibold',
     bold: 'font-bold',
   };
 
