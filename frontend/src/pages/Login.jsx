@@ -4,7 +4,7 @@ import Text from '../components/text.jsx';
 import Input from '../components/input.jsx';
 import Button from '../components/button.jsx';
 import FinanceAppSvg from '../assets/finance-app.svg?react';
-import MoneyIcon from '../assets/money-manager-svgrepo-com.svg?react';
+import LogoIcon from '../components/LogoIcon.jsx';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -53,7 +53,7 @@ export default function Login() {
       <div className='flex w-full md:w-1/2 items-center justify-center p-6'>
         <div className='w-full max-w-md'>
           {/* LOGO */}
-          <div className='mb-8 flex items-center gap-4'>
+          {/* <div className='mb-8 flex items-center gap-4'>
             <MoneyIcon className='h-15 w-15 text-primary' />
 
             <div className='leading-tight'>
@@ -74,7 +74,9 @@ export default function Login() {
                 Tributária
               </Text>
             </div>
-          </div>
+          </div> */}
+
+          <LogoIcon />
 
           {/* HEADER */}
           <div className='mb-8'>

@@ -5,8 +5,7 @@ import Text from '../components/text.jsx';
 import Input from '../components/input.jsx';
 import Button from '../components/button.jsx';
 import FinanceAppSvg from '../assets/finance-app.svg?react';
-import MoneyIcon from '../assets/money-manager-svgrepo-com.svg?react';
-
+import LogoIcon from '../components/LogoIcon.jsx';
 export default function Register() {
   const api = axios.create({
     baseURL: 'http://localhost:5000/auth',
@@ -71,11 +70,19 @@ export default function Register() {
           <FinanceAppSvg className='animated mx-auto h-auto w-full max-w-[95rem]' />
 
           <div className='mt-6 text-center'>
-            <Text as='h3' size='lg' weight='medium'>
+            <Text
+              as='h3'
+              size='lg'
+              weight='medium'
+            >
               Crie. Organize. Simule.
             </Text>
-            <Text size='sm' className='mt-2 text-gray-600'>
-              Cadastre-se para comparar cenários tributários e acompanhar seus resultados.
+            <Text
+              size='sm'
+              className='mt-2 text-gray-600'
+            >
+              Cadastre-se para comparar cenários tributários e acompanhar seus
+              resultados.
             </Text>
           </div>
         </div>
@@ -85,37 +92,33 @@ export default function Register() {
       <div className='flex w-full items-center justify-center p-6 md:w-1/2'>
         <div className='w-full max-w-md'>
           {/* LOGO */}
-          <div className='mb-8 flex items-center gap-4'>
-            <MoneyIcon className='h-15 w-15 text-primary' />
-
-            <div className='leading-tight'>
-              <Text as='span' size='xl' className='block text-foreground'>
-                Calculadora
-              </Text>
-              <Text
-                as='span'
-                size='2xl'
-                weight='bold'
-                className='block !text-primary font-bold'
-              >
-                Tributária
-              </Text>
-            </div>
-          </div>
+          <LogoIcon />
 
           {/* HEADER */}
           <div className='mb-8'>
-            <Text as='h1' size='5xl' weight='bold'>
+            <Text
+              as='h1'
+              size='5xl'
+              weight='bold'
+            >
               Criar conta
             </Text>
-            <Text size='sm' className='mt-2 text-gray-500'>
+            <Text
+              size='sm'
+              className='mt-2 text-gray-500'
+            >
               Preencha os dados abaixo para começar suas simulações
             </Text>
           </div>
 
           <form onSubmit={handleSubmit}>
             <div className='mb-4'>
-              <Text as='label' htmlFor='register-name' size='sm' className='mb-1 block'>
+              <Text
+                as='label'
+                htmlFor='register-name'
+                size='sm'
+                className='mb-1 block'
+              >
                 Nome
               </Text>
               <Input
@@ -128,17 +131,30 @@ export default function Register() {
                 variant={errors.name ? 'error' : 'default'}
                 className='focus:border-primary focus:ring-primary/30'
                 aria-invalid={errors.name ? 'true' : undefined}
-                aria-describedby={errors.name ? 'register-name-error' : undefined}
+                aria-describedby={
+                  errors.name ? 'register-name-error' : undefined
+                }
               />
               {errors.name && (
-                <Text as='p' id='register-name-error' role='alert' size='sm' className='mt-1 !text-danger'>
+                <Text
+                  as='p'
+                  id='register-name-error'
+                  role='alert'
+                  size='sm'
+                  className='mt-1 !text-danger'
+                >
                   {errors.name}
                 </Text>
               )}
             </div>
 
             <div className='mb-4'>
-              <Text as='label' htmlFor='register-email' size='sm' className='mb-1 block'>
+              <Text
+                as='label'
+                htmlFor='register-email'
+                size='sm'
+                className='mb-1 block'
+              >
                 E-mail
               </Text>
               <Input
@@ -152,17 +168,30 @@ export default function Register() {
                 variant={errors.email ? 'error' : 'default'}
                 className='focus:border-primary focus:ring-primary/30'
                 aria-invalid={errors.email ? 'true' : undefined}
-                aria-describedby={errors.email ? 'register-email-error' : undefined}
+                aria-describedby={
+                  errors.email ? 'register-email-error' : undefined
+                }
               />
               {errors.email && (
-                <Text as='p' id='register-email-error' role='alert' size='sm' className='mt-1 !text-danger'>
+                <Text
+                  as='p'
+                  id='register-email-error'
+                  role='alert'
+                  size='sm'
+                  className='mt-1 !text-danger'
+                >
                   {errors.email}
                 </Text>
               )}
             </div>
 
             <div className='mb-4'>
-              <Text as='label' htmlFor='register-password' size='sm' className='mb-1 block'>
+              <Text
+                as='label'
+                htmlFor='register-password'
+                size='sm'
+                className='mb-1 block'
+              >
                 Senha
               </Text>
               <Input
@@ -175,20 +204,38 @@ export default function Register() {
                 variant={errors.password ? 'error' : 'default'}
                 className='focus:border-primary focus:ring-primary/30'
                 aria-invalid={errors.password ? 'true' : undefined}
-                aria-describedby={errors.password ? 'register-password-error' : undefined}
+                aria-describedby={
+                  errors.password ? 'register-password-error' : undefined
+                }
               />
-              <Text as='p' size='sm' className='mt-1 text-gray-500'>
-                Sua senha deve ter entre 8 e 20 caracteres e conter letras e números.
+              <Text
+                as='p'
+                size='sm'
+                className='mt-1 text-gray-500'
+              >
+                Sua senha deve ter entre 8 e 20 caracteres e conter letras e
+                números.
               </Text>
               {errors.password && (
-                <Text as='p' id='register-password-error' role='alert' size='sm' className='mt-1 !text-danger'>
+                <Text
+                  as='p'
+                  id='register-password-error'
+                  role='alert'
+                  size='sm'
+                  className='mt-1 !text-danger'
+                >
                   {errors.password}
                 </Text>
               )}
             </div>
 
             <div className='mb-6'>
-              <Text as='label' htmlFor='register-confirm-password' size='sm' className='mb-1 block'>
+              <Text
+                as='label'
+                htmlFor='register-confirm-password'
+                size='sm'
+                className='mb-1 block'
+              >
                 Confirmar senha
               </Text>
               <Input
@@ -201,21 +248,39 @@ export default function Register() {
                 variant={errors.confirmPassword ? 'error' : 'default'}
                 className='focus:border-primary focus:ring-primary/30'
                 aria-invalid={errors.confirmPassword ? 'true' : undefined}
-                aria-describedby={errors.confirmPassword ? 'register-confirm-password-error' : undefined}
+                aria-describedby={
+                  errors.confirmPassword
+                    ? 'register-confirm-password-error'
+                    : undefined
+                }
               />
               {errors.confirmPassword && (
-                <Text as='p' id='register-confirm-password-error' role='alert' size='sm' className='mt-1 !text-danger'>
+                <Text
+                  as='p'
+                  id='register-confirm-password-error'
+                  role='alert'
+                  size='sm'
+                  className='mt-1 !text-danger'
+                >
                   {errors.confirmPassword}
                 </Text>
               )}
             </div>
 
-            <Button type='submit' variant='primary' className='w-full rounded-xl'>
+            <Button
+              type='submit'
+              variant='primary'
+              className='w-full rounded-xl'
+            >
               Registrar
             </Button>
           </form>
 
-          <Text as='p' size='sm' className='mt-5 text-center text-gray-500'>
+          <Text
+            as='p'
+            size='sm'
+            className='mt-5 text-center text-gray-500'
+          >
             Já tem conta?{' '}
             <Link
               to='/login'
