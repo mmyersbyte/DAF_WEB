@@ -4,8 +4,8 @@ import MoneyIcon from '../assets/money-manager-svgrepo-com.svg?react';
 
 export default function LogoIcon() {
   return (
-    <div className='mb-8 flex items-center gap-4'>
-      <MoneyIcon className='h-15 w-15 text-primary' />
+    <div className='flex items-center gap-3'>
+      <MoneyIcon className='h-14 w-14 text-primary' />
 
       <div className='leading-tight'>
         <Text
