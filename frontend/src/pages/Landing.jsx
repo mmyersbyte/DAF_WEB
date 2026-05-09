@@ -86,7 +86,8 @@ export default function Landing() {
               aria-label='Ilustracao de app financeiro para comparacao tributaria'
             />
             <figcaption className='sr-only'>
-              Ilustracao de um aplicativo de financas representando simulacao de custos para decidir entre PF e PJ.
+              Ilustracao de um aplicativo de financas representando simulacao de
+              custos para decidir entre PF e PJ.
             </figcaption>
           </figure>
         </section>
@@ -157,9 +158,12 @@ export default function Landing() {
               <summary className='cursor-pointer list-none text-base font-semibold text-[var(--color-text)] marker:content-none'>
                 A calculadora realmente e gratuita?
               </summary>
-              <Text size='md' className='mt-2 text-gray-600'>
-                Sim. A ferramenta tem foco academico e uso educacional, sem custo
-                para simulacoes.
+              <Text
+                size='md'
+                className='mt-2 text-gray-600'
+              >
+                Sim. A ferramenta tem foco academico e uso educacional, sem
+                custo para simulacoes.
               </Text>
             </details>
 
@@ -167,9 +171,12 @@ export default function Landing() {
               <summary className='cursor-pointer list-none text-base font-semibold text-[var(--color-text)] marker:content-none'>
                 Quais dados preciso informar na simulacao?
               </summary>
-              <Text size='md' className='mt-2 text-gray-600'>
-                Voce informa renda mensal, custos mensais e profissao. Com isso o
-                sistema compara os cenarios PF e PJ.
+              <Text
+                size='md'
+                className='mt-2 text-gray-600'
+              >
+                Voce informa renda mensal, custos mensais e profissao. Com isso
+                o sistema compara os cenarios PF e PJ.
               </Text>
             </details>
 
@@ -177,10 +184,13 @@ export default function Landing() {
               <summary className='cursor-pointer list-none text-base font-semibold text-[var(--color-text)] marker:content-none'>
                 Como o sistema calcula os tributos de PF?
               </summary>
-              <Text size='md' className='mt-2 text-gray-600'>
-                O calculo considera IRRF e compara as duas modalidades (deducoes e
-                desconto simplificado), escolhendo a mais vantajosa conforme os
-                dados informados.
+              <Text
+                size='md'
+                className='mt-2 text-gray-600'
+              >
+                O calculo considera IRRF e compara as duas modalidades (deducoes
+                e desconto simplificado), escolhendo a mais vantajosa conforme
+                os dados informados.
               </Text>
             </details>
 
@@ -188,9 +198,13 @@ export default function Landing() {
               <summary className='cursor-pointer list-none text-base font-semibold text-[var(--color-text)] marker:content-none'>
                 Como funciona o calculo de PJ no Simples Nacional?
               </summary>
-              <Text size='md' className='mt-2 text-gray-600'>
-                Para PJ, a base principal e a receita mensal. O sistema estima DAS,
-                INSS sobre pro-labore e IRRF do pro-labore para compor os encargos.
+              <Text
+                size='md'
+                className='mt-2 text-gray-600'
+              >
+                Para PJ, a base principal e a receita mensal. O sistema estima
+                DAS, INSS sobre pro-labore e IRRF do pro-labore para compor os
+                encargos.
               </Text>
             </details>
 
@@ -198,9 +212,12 @@ export default function Landing() {
               <summary className='cursor-pointer list-none text-base font-semibold text-[var(--color-text)] marker:content-none'>
                 Posso enviar os resultados para tirar duvidas com o NAF?
               </summary>
-              <Text size='md' className='mt-2 text-gray-600'>
-                Sim. A plataforma permite encaminhar os resultados por e-mail para
-                o NAF da Unichristus quando voce precisar de orientacao.
+              <Text
+                size='md'
+                className='mt-2 text-gray-600'
+              >
+                Sim. A plataforma permite encaminhar os resultados por e-mail
+                para o NAF da Unichristus quando voce precisar de orientacao.
               </Text>
             </details>
           </div>
