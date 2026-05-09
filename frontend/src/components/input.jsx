@@ -13,7 +13,7 @@ export default function Input({
 
   const variants = {
     default:
-      'border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30',
+      'border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/30',
     error:
       'border border-red-500 bg-white text-gray-900 placeholder:text-gray-400 focus:border-red-600 focus:ring-2 focus:ring-red-500/30',
   };
