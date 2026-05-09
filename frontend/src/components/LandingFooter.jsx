@@ -6,16 +6,27 @@ export default function LandingFooter() {
     <footer className='border-t border-[var(--color-border)] bg-primary-dark/95 px-6 py-10 text-white'>
       <div className='mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-4'>
         <div>
-          <Text size='lg' weight='bold' className='mb-2 !text-white'>
+          <Text
+            size='lg'
+            weight='bold'
+            className='mb-2 !text-white'
+          >
             Calculadora Tributária
           </Text>
-          <Text size='sm' className='text-green-100'>
+          <Text
+            size='sm'
+            className='text-green-100'
+          >
             Plataforma acadêmica para simulação comparativa de encargos PF e PJ.
           </Text>
         </div>
 
         <div>
-          <Text size='sm' weight='bold' className='mb-2 uppercase tracking-wide !text-white'>
+          <Text
+            size='sm'
+            weight='bold'
+            className='mb-2 uppercase tracking-wide !text-white'
+          >
             Serviços
           </Text>
           <ul className='space-y-1 text-sm text-green-100'>
@@ -27,7 +38,11 @@ export default function LandingFooter() {
         </div>
 
         <div>
-          <Text size='sm' weight='bold' className='mb-2 uppercase tracking-wide !text-white'>
+          <Text
+            size='sm'
+            weight='bold'
+            className='mb-2 uppercase tracking-wide !text-white'
+          >
             Suporte
           </Text>
           <ul className='space-y-1 text-sm text-green-100'>
@@ -39,12 +54,19 @@ export default function LandingFooter() {
         </div>
 
         <div>
-          <Text size='sm' weight='bold' className='mb-2 uppercase tracking-wide !text-white'>
+          <Text
+            size='sm'
+            weight='bold'
+            className='mb-2 uppercase tracking-wide !text-white'
+          >
             Avisos
           </Text>
-          <Text size='sm' className='text-green-100'>
-            © {new Date().getFullYear()} UNICHRISTUS. Uso educativo: não substitui orientação
-            contábil oficial.
+          <Text
+            size='sm'
+            className='text-green-100'
+          >
+            © {new Date().getFullYear()} UNICHRISTUS. Uso educativo: não
+            substitui orientação contábil oficial.
           </Text>
         </div>
       </div>
