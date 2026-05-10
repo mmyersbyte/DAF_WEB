@@ -4,13 +4,13 @@ import MoneyIcon from '../assets/money-manager-svgrepo-com.svg?react';
 
 export default function LogoIcon() {
   return (
-    <div className='flex items-center gap-3'>
-      <MoneyIcon className='h-14 w-14 text-primary' />
+    <div className='mb-8 flex items-center gap-4'>
+      <MoneyIcon className='h-18 w-18 text-primary' />
 
       <div className='leading-tight'>
         <Text
           as='span'
-          size='xl'
+          size='lg'
           className='block text-foreground'
         >
           Calculadora
@@ -18,7 +18,7 @@ export default function LogoIcon() {
 
         <Text
           as='span'
-          size='2xl'
+          size='lg'
           weight='bold'
           className='block !text-primary font-bold'
         >

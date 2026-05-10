@@ -1,121 +1,177 @@
-import React, { useState } from "react";
-import GraficoComparativo from "./GraficoComparativo";
+/**
+ * CompareResult — exibe o resultado da simulação PF × PJ após o utilizador submeter o formulário na Home.
+ *
+ * Origem dos dados:
+ * - `result` vem de Home: junta o retorno de compareTaxes() (pacote util/tax) com `input` extra
+ *   (renda, custos, profissão) guardado no estado da página.
+ *
+ * Estrutura esperada de `result`:
+ * - `PF`, `PJ` — objetos numéricos devolvidos por compareTaxes (impostos, líquidos, flags).
+ * - `PJ.dasRowLabel` — texto da primeira linha da coluna PJ (DAS conforme Anexo).
+ * - `PJ.cppPatronal` — CPP patronal (advocacia); 0 nas demais profissões.
+ *
+ * Este componente só apresenta dados; não recalcula impostos.
+ */
+import React, { useState } from 'react';
+import GraficoComparativo from './GraficoComparativo.jsx';
+import Text from './text.jsx';
+import Button from './button.jsx';
+import { gerarPDF } from '../util/pdf/gerarPdfResultado.js';
 
-export default function CompareResult({ result, onSendEmailNAF, onBack }) {
-  const [sending, setSending] = useState(false);
+export default function CompareResult({ result, onBack }) {
+  const [pdfLoading, setPdfLoading] = useState(false);
+
   if (!result) return null;
 
   const { PF, PJ, input } = result;
 
-  async function handleSendToNAF() {
-    setSending(true);
+  const dasTitulo =
+    PJ.dasRowLabel ||
+    'DAS (Simples Nacional)';
+
+  async function handleBaixarPdf() {
+    setPdfLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/email/send-calculation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          emailUser: input.emailUser,
-          emailNAF: input.emailNAF,
-          profissao: input.profissao,
-          rendaMensal: input.rendaMensal,
-          custosMensais: input.custosMensais,
-          PF,
-          PJ,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Resultado enviado ao NAF com sucesso!");
-        onSendEmailNAF && onSendEmailNAF({ success: true });
-      } else {
-        alert(data.error || "Erro ao enviar email");
-        onSendEmailNAF && onSendEmailNAF({ success: false });
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao enviar email");
-      onSendEmailNAF && onSendEmailNAF({ success: false });
+      await gerarPDF('resultado');
+    } finally {
+      setPdfLoading(false);
     }
-    setSending(false);
   }
 
   return (
-    <div className="card shadow-lg border-0 rounded-3 p-4">
-      <h4 className="section-title">Resultado da Simulação</h4>
+    <div className='rounded-3xl border border-[var(--color-border)] bg-white p-6 shadow-xl shadow-gray-900/10 md:p-8'>
+      {/* Bloco capturado pelo html2canvas → jsPDF (título, resumo, tabela, conclusão, gráfico). */}
+      <div id='resultado' style={{ width: '100%', boxSizing: 'border-box' }}>
+        <Text
+          as='h2'
+          size='title'
+          weight='bold'
+          color='primaryDark'
+          className='mb-6'
+        >
+          Resultado da simulação
+        </Text>
 
-      {/* Informações de entrada */}
-      <div className="mb-3">
-        <p><strong>Profissão:</strong> {input.profissao}</p>
-        <p><strong>Renda informada:</strong> R$ {input.rendaMensal}</p>
-        <p><strong>Custos mensais:</strong> R$ {input.custosMensais}</p>
+      <div className='mb-6 space-y-2 rounded-2xl bg-primary-light/30 p-4'>
+        <Text size='caption' color='text'>
+          <span className='font-semibold text-[var(--color-primary-dark)]'>
+            Profissão:
+          </span>{' '}
+          {input.profissao}
+        </Text>
+        <Text size='caption' color='text'>
+          <span className='font-semibold text-[var(--color-primary-dark)]'>
+            Renda informada:
+          </span>{' '}
+          R$ {input.rendaMensal}
+        </Text>
+        <Text size='caption' color='text'>
+          <span className='font-semibold text-[var(--color-primary-dark)]'>
+            Custos mensais:
+          </span>{' '}
+          R$ {input.custosMensais}
+        </Text>
       </div>
 
-      {/* Tabela detalhada */}
-      <table className="table table-hover align-middle">
-        <thead style={{ backgroundColor: "#a6b1ff", color: "white" }}>
-          <tr>
-            <th>Categoria</th>
-            <th>PF</th>
-            <th>PJ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="label">Simples Nacional (6%)</td>
-            <td>—</td>
-            <td>R$ {PJ.simples6}</td>
-          </tr>
-          <tr>
-            <td className="label">INSS</td>
-            <td>R$ {PF.inss}</td>
-            <td>R$ {PJ.inss}</td>
-          </tr>
-          <tr>
-            <td className="label">Imposto de Renda</td>
-            <td>{PF.isentoIR ? "Isento" : `R$ ${PF.ir}`}</td>
-            <td>{PJ.isentoIR ? "Isento" : `R$ ${PJ.ir}`}</td>
-          </tr>
-          <tr>
-            <td className="label">Total de Impostos</td>
-            <td>R$ {PF.imposto}</td>
-            <td>R$ {PJ.totalImpostos}</td>
-          </tr>
-          <tr>
-            <td className="label">Renda Líquida</td>
-            <td>R$ {PF.liquido}</td>
-            <td>R$ {PJ.liquido}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div className="data-block mt-4">
-        <p>
-          <strong>Conclusão:</strong>{" "}
-          {PJ.liquido > PF.liquido ? "PJ compensa mais" : "PF compensa mais"}
-        </p>
+      <div className='overflow-x-auto rounded-xl'>
+        <table
+          className='min-w-full divide-y divide-[var(--color-border)] text-left text-sm'
+          style={{ width: '100%' }}
+        >
+          <thead className='bg-[var(--color-primary-dark)] text-white'>
+            <tr>
+              <th className='px-4 py-3 font-semibold'>Categoria</th>
+              <th className='px-4 py-3 font-semibold'>PF</th>
+              <th className='px-4 py-3 font-semibold'>PJ</th>
+            </tr>
+          </thead>
+          <tbody className='divide-y divide-[var(--color-border)] bg-white'>
+            {/* DAS do Simples — rótulo depende da profissão (Anexo III vs IV). */}
+            <tr className='hover:bg-primary-light/20'>
+              <td className='px-4 py-3 font-medium text-gray-800'>{dasTitulo}</td>
+              <td className='px-4 py-3 text-gray-700'>—</td>
+              <td className='px-4 py-3 text-gray-700'>
+                R$ {PJ.dasMensal ?? PJ.simples6}
+              </td>
+            </tr>
+            <tr className='hover:bg-primary-light/20'>
+              <td className='px-4 py-3 font-medium text-gray-800'>
+                INSS (sócio / autônomo)
+              </td>
+              <td className='px-4 py-3 text-gray-700'>R$ {PF.inss}</td>
+              <td className='px-4 py-3 text-gray-700'>R$ {PJ.inss}</td>
+            </tr>
+            {/* CPP patronal — apenas advocacia (material 2026); nas outras profissões não há linha separada. */}
+            <tr className='hover:bg-primary-light/20'>
+              <td className='px-4 py-3 font-medium text-gray-800'>
+                CPP patronal (20% sobre pró-labore)
+              </td>
+              <td className='px-4 py-3 text-gray-700'>—</td>
+              <td className='px-4 py-3 text-gray-700'>
+                {PJ.cppPatronal > 0 ? `R$ ${PJ.cppPatronal}` : '—'}
+              </td>
+            </tr>
+            <tr className='hover:bg-primary-light/20'>
+              <td className='px-4 py-3 font-medium text-gray-800'>
+                Imposto de Renda
+              </td>
+              <td className='px-4 py-3 text-gray-700'>
+                {PF.isentoIR ? 'Isento' : `R$ ${PF.ir}`}
+              </td>
+              <td className='px-4 py-3 text-gray-700'>
+                {PJ.isentoIR ? 'Isento' : `R$ ${PJ.ir}`}
+              </td>
+            </tr>
+            <tr className='hover:bg-primary-light/20'>
+              <td className='px-4 py-3 font-medium text-gray-800'>
+                Total de impostos
+              </td>
+              <td className='px-4 py-3 text-gray-700'>R$ {PF.imposto}</td>
+              <td className='px-4 py-3 text-gray-700'>R$ {PJ.totalImpostos}</td>
+            </tr>
+            <tr className='bg-primary-light/40 font-semibold'>
+              <td className='px-4 py-3 text-[var(--color-primary-dark)]'>
+                Renda líquida
+              </td>
+              <td className='px-4 py-3 text-gray-900'>R$ {PF.liquido}</td>
+              <td className='px-4 py-3 text-gray-900'>R$ {PJ.liquido}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <hr />
+      <div className='mt-6 rounded-xl border border-[var(--color-border)] bg-gray-50/80 p-4'>
+        <Text size='md' color='text'>
+          <span className='font-bold text-[var(--color-primary-dark)]'>
+            Conclusão:
+          </span>{' '}
+          {PJ.liquido > PF.liquido
+            ? 'PJ compensa mais neste cenário.'
+            : 'PF compensa mais neste cenário.'}
+        </Text>
+      </div>
+
+      <div className='my-8 h-px bg-[var(--color-border)]' />
+
       <GraficoComparativo PF={PF} PJ={PJ} />
-      <hr />
 
-      <div className="d-flex justify-content-between mt-4">
-        <button
-          className="btn btn-secondary rounded-pill px-4"
-          onClick={onBack}
+      </div>
+
+      <div className='my-8 h-px bg-[var(--color-border)]' />
+
+      <div className='flex flex-wrap gap-3'>
+        <Button
+          type='button'
+          variant='secondary'
+          disabled={pdfLoading}
+          className='px-4'
+          onClick={handleBaixarPdf}
         >
+          {pdfLoading ? 'Gerando…' : 'Baixar PDF'}
+        </Button>
+        <Button type='button' variant='secondary' onClick={onBack}>
           Voltar
-        </button>
-        <button
-          className="btn rounded-pill px-4"
-          style={{ backgroundColor: "#6a5acd", color: "white" }}
-          onClick={handleSendToNAF}
-          disabled={sending}
-        >
-          {sending ? "Enviando..." : "Enviar ao NAF"}
-        </button>
+        </Button>
       </div>
     </div>
   );
