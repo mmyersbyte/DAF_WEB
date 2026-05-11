@@ -3,7 +3,6 @@
 @config "../tailwind.config.js";
 
 :root {
-  /* 🔵 neutros */
   --color-bg: #ffffff;
   --color-text: #111827;
 
@@ -11,7 +10,6 @@
   --color-primary-dark: #16a34a;
   --color-primary-light: #dcfce7;
 
-  /* 💰 destaque financeiro */
   --color-accent: #f59e0b; /* amarelo dinheiro */
 
   /* estados */
@@ -22,4 +20,14 @@
   --color-border: #e5e7eb;
 
   --font-family: 'Cairo', sans-serif;
+}
+
+.home-hero-svg {
+  isolation: isolate;
+}
+
+.home-hero-svg svg {
+  display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
