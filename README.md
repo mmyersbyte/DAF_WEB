@@ -1,107 +1,165 @@
-# 📊 Calculadora Tributária 
+# Calculadora Tributária (NAF)
 
+## Sobre o projeto
 
-## 📌 Sobre o projeto
-Este é um projeto desenvolvido para a cadeira de Desenvolvimento e Aplicações e Frameworks Web, da Unichristus - DOM LUIS, com o objetivo de criar uma aplicação que **compare a tributação entre Pessoa Física (PF) e Pessoa Jurídica (PJ)** de forma simples e visual.  
-A aplicação permite que o usuário insira sua renda mensal, custos e profissão, e receba um comparativo detalhado entre os dois regimes, incluindo:
+Aplicação desenvolvida no âmbito da cadeira de **Desenvolvimento e Aplicações e Frameworks Web** (Unichristus – Dom Luis). Objetivo: **comparar tributação entre Pessoa Física (PF) e Pessoa Jurídica (PJ)** de forma simples e visual, com base em **regras didáticas para o ano de 2026**.
 
-- INSS  
-- Imposto de Renda  
-- Simples Nacional (PJ – 6%)  
-- Total de impostos  
-- Renda líquida após tributos  
+O utilizador informa **renda mensal**, **custos mensais** e **profissão**. A ferramenta calcula impostos representativos e mostra um comparativo entre regimes.
 
-Além disso, o sistema gera gráficos comparativos e possibilita enviar os resultados para o **NAF (Núcleo de Apoio Contábil e Fiscal)** via e-mail.
+### Público-alvo e cenários (2026)
 
----
+- **Psicólogo(a)** e **Arquiteto(a)** — PJ via **Anexo III** (serviços).
+- **Advogado(a)** — PJ via **Anexo IV** (com lógica de CPP quando aplicável ao modelo).
 
-## 🚀 Tecnologias utilizadas
-- **React.js** – construção da interface  
-- **React Router** – navegação entre páginas (Login e Home)  
-- **Chart.js** – geração dos gráficos comparativos  
-- **Bootstrap** – estilização e responsividade  
-- **Node.js/Express (backend)** – envio de e-mails e integração  
-- **PostgreSQL + Docker Compose** – banco de dados e containerização  
+Os valores e alíquotas seguem constantes documentadas em `util/tax/constants2026.js` e módulos específicos de PF/PJ (uso **didático**, não substitui orientação profissional ou legislação oficial consolidada).
 
 ---
 
-## ⚙️ Funcionalidades
-- Formulário para entrada de dados (renda, custos, profissão, e-mails).  
-- Comparativo automático entre PF e PJ.  
-- Exibição detalhada em tabela: INSS, IR, Simples Nacional, total de impostos e renda líquida.  
-- Gráfico comparativo PF × PJ.  
-- Botão de **Sair** que retorna para a tela de login.  
-- Envio dos resultados por e-mail para o NAF.  
+## Funcionalidades
+
+| Área | Descrição |
+|------|-----------|
+| **Simulação** | Formulário com renda, custos e profissão (Psicologia, Arquitetura, Advocacia). |
+| **Comparativo PF × PJ** | Tabela com INSS, IRPF, DAS (PJ), totais e renda líquida aproximada. |
+| **Gráficos** | Gráfico comparativo (Chart.js). |
+| **PDF** | Exportação do resultado (html2canvas + jsPDF). |
+| **Landing** | Página inicial institucional com navegação para login/registo. |
+| **Autenticação** | Login e registo integrados ao backend (JWT / PostgreSQL). |
+| **E-mail NAF** | Envio de resultados por e-mail para o Núcleo de Apoio Contábil e Fiscal. |
+| **Chatbot “Maurício”** | Assistente no canto da aplicação (**assistant-ui** + API dedicada no backend, Groq). |
 
 ---
 
-## 📂 Estrutura principal (Frontend)
-- `src/components/CalculatorForm.jsx` → formulário de entrada.  
-- `src/components/CompareResult.jsx` → tabela e gráfico comparativo.  
-- `src/components/GraficoComparativo.jsx` → gráfico com Chart.js.  
-- `src/pages/Home.jsx` → página principal com header e botão de sair.  
-- `src/util/tax.js` → funções de cálculo de impostos (PF e PJ).  
+## Tecnologias — Frontend
+
+| Tecnologia | Uso |
+|------------|-----|
+| **React 19** | Interface e componentes. |
+| **Vite 7** | Build e servidor de desenvolvimento. |
+| **Tailwind CSS 4** | Estilização utilitária (`@tailwindcss/vite`, `src/index.css`). |
+| **React Router 7** | Rotas (landing, login, registo, home). |
+| **Chart.js** + **react-chartjs-2** | Gráfico comparativo. |
+| **axios** | Chamadas HTTP (API principal e chatbot). |
+| **@assistant-ui/react** | Interface do chat (runtime local + primitivos de thread/composer). |
+| **jspdf** + **html2canvas** | Geração de PDF a partir do resultado na página. |
+| **vite-plugin-svgr** | Importação de SVG como componentes React (`?react`). |
+| **animate.css** | Animações auxiliares onde aplicável. |
+
+> **Nota:** O projeto **não utiliza Bootstrap**; o layout é **Tailwind**.
 
 ---
 
-## ▶️ Como executar
+## Estrutura principal do Frontend
 
-### Pré-requisitos
-- Node.js 16+  
-- Docker e Docker Compose  
-- Git
-- Prisma 5.10
-
-### Setup Inicial
-
-#### 1. Clonar repositório
-```bash
-git clone https://github.com/lmatheus07/DAFWEB.git
+```
+frontend/
+├── index.html
+├── package.json
+├── vite.config.js          # React plugin, Tailwind, SVGR
+└── src/
+    ├── main.jsx            # Entrada React
+    ├── app.jsx             # Rotas (BrowserRouter)
+    ├── index.css           # Tailwind + variáveis CSS (:root)
+    ├── config/             # Configuração partilhada (ex.: API base)
+    ├── pages/
+    │   ├── Landing.jsx     # Página inicial pública
+    │   ├── Login.jsx
+    │   ├── Register.jsx
+    │   └── Home.jsx        # Calculadora + chatbot (FAB)
+    ├── components/
+    │   ├── CalculatorForm.jsx
+    │   ├── CompareResult.jsx      # Resultado, PDF, e-mail
+    │   ├── GraficoComparativo.jsx
+    │   ├── FeatureCard.jsx
+    │   ├── LandingHeader.jsx / LandingFooter.jsx
+    │   ├── LogoIcon.jsx
+    │   ├── InfoModal.jsx
+    │   ├── button.jsx / input.jsx / text.jsx
+    │   ├── FloatingChatBotButton.jsx
+    │   └── chatbot/
+    │       └── Chatbot.jsx        # assistant-ui + POST /chat
+    └── util/
+        ├── tax/                   # Motor de cálculo 2026
+        │   ├── index.js           # compareTaxes, exports
+        │   ├── constants2026.js
+        │   ├── professions.js
+        │   ├── pf2026.js
+        │   ├── pjServicos2026.js  # Psicólogo / Arquiteto
+        │   ├── pjAdvogado2026.js
+        │   ├── irpfProgressive2026.js
+        │   ├── compare.js
+        │   └── round.js
+        └── pdf/
+            └── gerarPdfResultado.js
 ```
 
-#### 2. Instalar dependências
-- npm install
+Variável opcional no frontend: **`VITE_CHATBOT_URL`** — URL base do serviço de chat (por defeito `http://localhost:3000` no código do `Chatbot.jsx`).
 
-#### 3. Configurar variáveis de ambiente
-Copie o arquivo .env.example para .env e preencha seus valores:
-**cp .env.example .env**
+---
 
-#### Edite .env com: 
-- **DB_PASSWORD**: Senha do PostgreSQL (deve corresponder ao docker-compose.yml)
-- **JWT_SECRET**: Chave secreta para JWT (gere uma aleatória)
-- **EMAIL_USER e EMAIL_PASSWORD**: Credenciais do seu serviço de e-mail (ex: Gmail)
-- **FRONTEND_URL**: URL do seu frontend (ex: http://localhost:5173)
+## Tecnologias — Backend (resumo)
 
-#### 4. Iniciar PostegreSQL com Docker:
-**docker-compose up -d**
-# Verificar se container está rodando com:
-**docker-compose ps**
+- **Node.js** + **Express** — API principal (auth, e-mail, etc.).
+- **PostgreSQL** + **Prisma** — persistência.
+- **JWT** + **bcrypt** — autenticação.
+- **Nodemailer** — envio de e-mails.
+- **Serviço de chat** (`src/chatbot/index.js`) — **Groq** (`groq-sdk`), prompt em `src/chatbot/prompts/systems.txt`, porta **3000**.
 
+---
 
-#### 5. Inicializar o banco de dados com:
-**npm run db:init**
-- Este comando criará as tabelas `users` e `comparisons`
+## Como executar
 
-#### 6. Iniciar o servidor
-**npm run dev**
+### Pré-requisitos
 
-- O servidor estará rodando em `http://localhost:5000`
+- Node.js 18+ recomendado  
+- Docker e Docker Compose (PostgreSQL)  
+- Git  
 
-## 📂 Estrutura principal (Backend)
-- `src/config/` → configurações de banco de dados e email  
-- `src/controllers/` → lógica de negócio das rotas  
-- `src/middleware/` → middlewares (ex: autenticação)  
-- `src/models/` → modelos de dados (ex: usuários, comparações)  
-- `src/routes/` → definição das rotas da API  
-- `src/services/` → serviços auxiliares (ex: envio de email)  
-- `src/templates/` → templates de email e relatórios  
-- `src/utils/` → funções utilitárias  
-- `src/server.js` → arquivo principal do servidor  
-- `docker-compose.yml` → configuração Docker  
-- `package.json` → dependências e scripts do backend  
-- `.env.example` → exemplo de variáveis de ambiente  
-- `.gitignore` → arquivos ignorados pelo Git
+### Backend (API principal)
 
+```bash
+cd backend
+npm install
+cp .env.example .env   # se existir; configure DB, JWT, e-mail, FRONTEND_URL
+docker compose up -d    # ou docker-compose conforme o projeto
+npm run db:init
+npm run dev             # http://localhost:5000 (ou PORT no .env)
+```
 
-## Observações
-**Este projeto foi desenvolvido como parte de um trabalho acadêmico, com foco em aplicações práticas de tributação e programação web. Não deve ser utilizado como ferramenta oficial de cálculo tributário, mas sim como exercício didático.**
+### Chatbot (opcional, serviço à parte)
+
+```bash
+cd backend
+# No .env: GROQ_API_KEY=...
+npm run dev:chatbot     # http://localhost:3000 — POST /chat
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev             # http://localhost:5173
+```
+
+Para produção do frontend: `npm run build` e servir a pasta `dist/`.
+
+---
+
+## Estrutura principal do Backend
+
+- `src/server.js` — API Express (porta 5000 por defeito).  
+- `src/routes/` — Rotas (auth, e-mail, …).  
+- `src/controllers/` — Controladores.  
+- `src/middleware/` — Autenticação JWT.  
+- `src/config/` — Base de dados, e-mail.  
+- `src/services/` — PDF, e-mail.  
+- `src/chatbot/` — Servidor do assistente (Groq).  
+- `docker-compose.yml` — PostgreSQL.  
+- `prisma` / `migrations` — Esquema e migrações (conforme configuração do repositório).  
+
+---
+
+## Observação legal e didática
+
+Este projeto é **trabalho académico** e material de **estudo**. Os cálculos são **aproximações didáticas** para 2026 e **não** constituem parecer contabilístico, fiscal ou jurídico. Para decisões reais, consulte um profissional habilitado e a legislação vigente.
