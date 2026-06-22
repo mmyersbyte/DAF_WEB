@@ -10,7 +10,7 @@
  * - `PJ.dasRowLabel` — texto da primeira linha da coluna PJ (DAS conforme Anexo).
  * - `PJ.cppPatronal` — CPP patronal (advocacia); 0 nas demais profissões.
  *
- * Este componente só apresenta dados; não recalcula impostos.
+ * Este componente só apresenta dados, nn  recalcula impostos.
  */
 import React, { useState } from 'react';
 import GraficoComparativo from './GraficoComparativo.jsx';

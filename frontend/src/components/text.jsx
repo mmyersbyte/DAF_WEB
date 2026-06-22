@@ -78,3 +78,13 @@ export default function Text({
     </Component>
   );
 }
+
+//
+// ex de implementacao:
+//
+// <Text>swodke</Text>
+//
+// <Text size="lg">Texto grande</Text
+
+// usando "as" para renderizar como <h1>, <h2>, <h3>, <h4>, <h5>, <h6>
+//ex: <Text as="h1">Titulo principal</Text>

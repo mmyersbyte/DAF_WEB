@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Text from '../components/text.jsx';
+
 import Input from '../components/input.jsx';
 import Button from '../components/button.jsx';
 import FinanceAppSvg from '../assets/finance-app.svg?react';
 import LogoIcon from '../components/LogoIcon.jsx';
-
+import { loginRequest, saveAuthData } from '../services/authService';
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -19,9 +20,30 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/home');
+
+    try {
+      const data = await loginRequest({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      saveAuthData({
+        token: data.token,
+        user: data.user,
+      });
+
+      navigate('/home');
+    } catch (error) {
+      const message =
+        error.response?.data?.message || 'Email ou senha inválidos.';
+
+      setErrors((prev) => ({
+        ...prev,
+        api: message,
+      }));
+    }
   };
 
   return (
@@ -146,6 +168,9 @@ export default function Login() {
             >
               Entrar
             </Button>
+            {errors.api && (
+              <p className='mt-2 text-sm text-red-500'>{errors.api}</p>
+            )}
           </form>
 
           {/* FOOTER */}

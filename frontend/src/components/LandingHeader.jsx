@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Text from './text.jsx';
 import Button from './button.jsx';
 import LogoIcon from './LogoIcon.jsx';
-//vou alterar o background pro verde escuro
 export default function LandingHeader() {
   return (
     <header className='z-30 border-b border-[var(--color-border)] bg-white/90 px-3 py-2 backdrop-blur-sm md:px-5'>

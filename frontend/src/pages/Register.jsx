@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import { registerRequest } from '../services/authService';
 import Text from '../components/text.jsx';
 import Input from '../components/input.jsx';
 import Button from '../components/button.jsx';
 import FinanceAppSvg from '../assets/finance-app.svg?react';
 import LogoIcon from '../components/LogoIcon.jsx';
 export default function Register() {
-  const api = axios.create({
-    baseURL: 'http://localhost:5000/auth',
-    timeout: 1000,
-    headers: { 'X-Custom-Header': 'foobar' },
-  });
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -42,26 +36,31 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      api
-        .post('/register', {
-          email: formData.email,
-          password: formData.password,
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
 
-      console.log('Registro:', formData);
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      await registerRequest({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+
       navigate('/login');
+    } catch (error) {
+      const message =
+        error.response?.data?.message || 'Não foi possível criar sua conta.';
+
+      setErrors((prev) => ({
+        ...prev,
+        api: message,
+      }));
     }
   };
-
   return (
     <div className='flex min-h-screen flex-col bg-background text-foreground md:flex-row'>
       {/* 🟢 LADO ESQUERDO (SVG / ILUSTRAÇÃO) */}
@@ -274,6 +273,9 @@ export default function Register() {
             >
               Registrar
             </Button>
+            {errors.api && (
+              <p className='mt-2 text-sm text-red-500'>{errors.api}</p>
+            )}
           </form>
 
           <Text

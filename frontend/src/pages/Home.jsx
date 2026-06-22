@@ -9,6 +9,9 @@ import Button from '../components/button.jsx';
 import BusinessPlanAnimate from '../assets/business-plan-animate.svg?react';
 import TimePastIcon from '../assets/cards/time-past-svgrepo-com.svg?react';
 import DataIcon from '../assets/cards/data-svgrepo-com.svg?react';
+import FloatingChatBotButton from '../components/FloatingChatBotButton.jsx';
+import Chatbot from '../components/chatbot/Chatbot.jsx';
+import { logout } from '../services/authService';
 
 function FeatureIconWrap({ children }) {
   return (
@@ -33,10 +36,13 @@ function ShieldIcon() {
 
 export default function Home() {
   const [result, setResult] = useState(null);
+  const [chatOpen, setChatOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = () => navigate('/login');
-
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
   function handleCompare(data) {
     const comparison = compareTaxes({
       rendaMensal: data.rendaMensal,
@@ -57,15 +63,27 @@ export default function Home() {
     setResult(null);
   }
 
+  function handleChatFabClick() {
+    setChatOpen(true);
+  }
+
   return (
     <div className='min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]'>
       <header className='border-b border-[var(--color-border)] bg-white px-4 py-5 md:px-8'>
         <div className='mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <Text as='h1' size='subtitle' weight='bold' color='text'>
+            <Text
+              as='h1'
+              size='subtitle'
+              weight='bold'
+              color='text'
+            >
               Calculadora Tributária
             </Text>
-            <Text size='md' className='mt-1 text-gray-600'>
+            <Text
+              size='md'
+              className='mt-1 text-gray-600'
+            >
               Compare PF e PJ de forma simples
             </Text>
           </div>
@@ -87,7 +105,10 @@ export default function Home() {
               <div className='space-y-6'>
                 <div className='inline-flex items-center rounded-full border border-[var(--color-primary)]/20 bg-primary-light px-4 py-1.5 text-sm font-medium text-[var(--color-primary-dark)]'>
                   Bem-vindo(a) de volta!{' '}
-                  <span className='ml-1' aria-hidden>
+                  <span
+                    className='ml-1'
+                    aria-hidden
+                  >
                     👋
                   </span>
                 </div>
@@ -101,16 +122,25 @@ export default function Home() {
                     className='text-balance'
                   >
                     Compare PF e PJ e descubra a melhor opção para o{' '}
-                    <span className='text-[var(--color-primary)]'>seu bolso</span>.
+                    <span className='text-[var(--color-primary)]'>
+                      seu bolso
+                    </span>
+                    .
                   </Text>
-                  <Text size='md' className='mt-3 max-w-xl text-gray-600'>
+                  <Text
+                    size='md'
+                    className='mt-3 max-w-xl text-gray-600'
+                  >
                     Nossa calculadora analisa os custos e impostos para você
                     economizar tempo e dinheiro.
                   </Text>
                 </div>
 
                 <div className='rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-xl shadow-gray-900/10 md:p-8'>
-                  <CalculatorForm onCompare={handleCompare} variant='home' />
+                  <CalculatorForm
+                    onCompare={handleCompare}
+                    variant='home'
+                  />
                 </div>
               </div>
 
@@ -118,9 +148,13 @@ export default function Home() {
                 className='relative flex justify-center lg:justify-end'
                 aria-hidden
               >
-                <div className='relative w-full max-w-md'>
+                {/* Tamanho da ilustração: troque max-w-md por max-w-lg, max-w-xl, max-w-2xl ou max-w-[600px] */}
+
+                <div className='relative w-full max-w-lg'>
                   <div className='pointer-events-none absolute -right-6 -top-6 -z-10 h-48 w-48 rounded-full bg-primary-light/80 blur-2xl md:h-64 md:w-64' />
-                  <BusinessPlanAnimate className='animated h-auto w-full max-w-full drop-shadow-sm' />
+                  <div className='home-hero-svg'>
+                    <BusinessPlanAnimate className='animated h-auto w-full max-w-full' />
+                  </div>
                 </div>
               </div>
             </section>
@@ -156,9 +190,28 @@ export default function Home() {
             </section>
           </>
         ) : (
-          <CompareResult result={result} onBack={handleBack} />
+          <CompareResult
+            result={result}
+            onBack={handleBack}
+          />
         )}
       </div>
+
+      <FloatingChatBotButton onClick={handleChatFabClick} />
+
+      {chatOpen ? (
+        <>
+          <button
+            type='button'
+            className='fixed inset-0 z-[100] bg-black/40 backdrop-blur-[1px]'
+            aria-label='Fechar chat'
+            onClick={() => setChatOpen(false)}
+          />
+          <div className='fixed bottom-0 right-0 z-[110] flex h-[min(85vh,640px)] w-full max-w-md flex-col overflow-hidden rounded-t-2xl border border-[var(--color-border)] bg-white shadow-2xl'>
+            <Chatbot onClose={() => setChatOpen(false)} />
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }
