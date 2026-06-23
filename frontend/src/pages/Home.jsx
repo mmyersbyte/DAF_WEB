@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import CalculatorForm from '../components/CalculatorForm.jsx';
 import CompareResult from '../components/CompareResult.jsx';
 import FeatureCard from '../components/FeatureCard.jsx';
-import { compareTaxes } from '../util/tax';
 import Text from '../components/text.jsx';
 import Button from '../components/button.jsx';
 import BusinessPlanAnimate from '../assets/business-plan-animate.svg?react';
@@ -12,6 +11,7 @@ import DataIcon from '../assets/cards/data-svgrepo-com.svg?react';
 import FloatingChatBotButton from '../components/FloatingChatBotButton.jsx';
 import Chatbot from '../components/chatbot/Chatbot.jsx';
 import { logout } from '../services/authService';
+import { compareTaxes } from '../util/tax';
 
 function FeatureIconWrap({ children }) {
   return (
@@ -43,20 +43,29 @@ export default function Home() {
     logout();
     navigate('/login');
   };
-  function handleCompare(data) {
-    const comparison = compareTaxes({
-      rendaMensal: data.rendaMensal,
-      custosMensais: data.custosMensais,
-      profissao: data.profissao,
-    });
-    setResult({
-      ...comparison,
-      input: {
+  async function handleCompare(data) {
+    try {
+      const result = await compareTaxesRequest({
         rendaMensal: data.rendaMensal,
         custosMensais: data.custosMensais,
         profissao: data.profissao,
-      },
-    });
+      });
+
+      setResult(result);
+    } catch (error) {
+      console.error('Erro ao calcular comparativo:', error);
+
+      if (error.response?.status === 401) {
+        logout();
+        navigate('/login');
+        return;
+      }
+
+      alert(
+        error.response?.data?.message ||
+          'Não foi possível calcular o comparativo.',
+      );
+    }
   }
 
   function handleBack() {
