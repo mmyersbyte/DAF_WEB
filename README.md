@@ -28,11 +28,11 @@
 
 ## Sobre o projeto
 
-Aplicação desenvolvida no âmbito da disciplina de **Desenvolvimento de Aplicações com Frameworks Web** da **Universidade Christus**.
+A **Calculadora Tributária - NAF** é uma aplicação web desenvolvida no âmbito da disciplina de **Desenvolvimento de Aplicações com Frameworks Web** da **Universidade Christus**.
 
-O objetivo do projeto é comparar, de forma simples e visual, a tributação entre **Pessoa Física (PF)** e **Pessoa Jurídica (PJ)** com base em regras didáticas para o ano de **2026**.
+O objetivo do projeto é permitir que o usuário compare, de forma simples e visual, a tributação entre **Pessoa Física (PF)** e **Pessoa Jurídica (PJ)** com base em regras didáticas para o ano de **2026**.
 
-O usuário informa **renda mensal**, **custos mensais** e **profissão**. A ferramenta calcula impostos representativos e apresenta um comparativo entre regimes.
+O usuário informa **renda mensal**, **custos mensais** e **profissão**. O frontend envia esses dados para o backend, que realiza o cálculo tributário, salva o histórico do comparativo no banco de dados e retorna o resultado para exibição na interface.
 
 ---
 
@@ -40,11 +40,9 @@ O usuário informa **renda mensal**, **custos mensais** e **profissão**. A ferr
 
 O sistema considera cenários didáticos para:
 
-- **Psicólogo(a)** — PJ via Anexo III.
-- **Arquiteto(a)** — PJ via Anexo III.
-- **Advogado(a)** — PJ via Anexo IV, com lógica de CPP quando aplicável ao modelo.
-
-Os valores e alíquotas seguem constantes documentadas nos arquivos do motor tributário em `src/util/tax/`.
+* **Psicólogo(a)** — PJ via Anexo III.
+* **Arquiteto(a)** — PJ via Anexo III.
+* **Advogado(a)** — PJ via Anexo IV, com lógica de CPP quando aplicável ao modelo.
 
 > Este projeto possui finalidade acadêmica e didática. Os cálculos não substituem orientação profissional, contábil, fiscal ou jurídica.
 
@@ -52,16 +50,18 @@ Os valores e alíquotas seguem constantes documentadas nos arquivos do motor tri
 
 ## Funcionalidades
 
-| Área                    | Descrição                                                         |
-| ----------------------- | ----------------------------------------------------------------- |
-| **Simulação**           | Formulário com renda, custos e profissão.                         |
-| **Comparativo PF × PJ** | Tabela com INSS, IRPF, DAS, totais e renda líquida aproximada.    |
-| **Gráficos**            | Gráfico comparativo utilizando Chart.js.                          |
-| **PDF**                 | Exportação do resultado com html2canvas e jsPDF.                  |
-| **Landing Page**        | Página inicial institucional com navegação para login e cadastro. |
-| **Autenticação**        | Login e cadastro integrados ao backend com JWT.                   |
-| **Chatbot “Maurício”**  | Assistente integrado ao backend autenticado.                      |
-| **Integração com API**  | Comunicação com o backend usando Axios.                           |
+| Área                    | Descrição                                                                |
+| ----------------------- | ------------------------------------------------------------------------ |
+| **Simulação**           | Formulário com renda, custos e profissão.                                |
+| **Comparativo PF × PJ** | Exibição de INSS, IRPF, DAS, totais e renda líquida aproximada.          |
+| **Cálculo via backend** | O cálculo tributário é realizado pela API e não diretamente no frontend. |
+| **Histórico**           | O backend salva os comparativos do usuário autenticado.                  |
+| **Gráficos**            | Gráfico comparativo utilizando Chart.js.                                 |
+| **PDF**                 | Exportação do resultado com html2canvas e jsPDF.                         |
+| **Landing Page**        | Página inicial institucional com navegação para login e cadastro.        |
+| **Autenticação**        | Login e cadastro integrados ao backend com JWT.                          |
+| **Chatbot “Maurício”**  | Assistente integrado ao backend autenticado.                             |
+| **Integração com API**  | Comunicação com o backend usando Axios.                                  |
 
 ---
 
@@ -102,6 +102,12 @@ A comunicação com o backend é feita por meio da variável de ambiente:
 VITE_API_URL=http://localhost:3000
 ```
 
+Documentação Swagger do backend:
+
+```txt
+http://localhost:3000/api-docs
+```
+
 ---
 
 ## Integração com autenticação
@@ -120,6 +126,64 @@ Authorization: Bearer SEU_TOKEN_AQUI
 ```
 
 Essa abordagem foi utilizada para facilitar a integração no contexto acadêmico. Em um ambiente de produção, o ideal seria evoluir para cookies `httpOnly`.
+
+---
+
+## Integração tributária
+
+O cálculo tributário foi movido para o backend. O frontend não realiza mais a regra principal de cálculo PF × PJ; ele apenas coleta os dados do formulário e envia para a API.
+
+A rota consumida pelo frontend é:
+
+```txt
+POST /tax/compare
+```
+
+Exemplo de envio:
+
+```json
+{
+  "rendaMensal": 10000,
+  "custosMensais": 1500,
+  "profissao": "Psicólogo"
+}
+```
+
+O backend calcula o comparativo, salva o histórico no PostgreSQL e retorna o resultado para o frontend exibir.
+
+Exemplo de resposta:
+
+```json
+{
+  "message": "Comparativo calculado e salvo com sucesso.",
+  "result": {
+    "comparisonId": 1,
+    "input": {
+      "rendaMensal": 10000,
+      "custosMensais": 1500,
+      "profissao": "Psicólogo",
+      "professionId": "psicologo"
+    },
+    "PF": {
+      "imposto": 2528.73,
+      "liquido": 7471.27
+    },
+    "PJ": {
+      "totalImpostos": 908,
+      "liquido": 9092
+    },
+    "bestOption": "PJ"
+  }
+}
+```
+
+O frontend também possui service preparado para consultar o histórico:
+
+| Método | Rota                   | Descrição                                    |
+| ------ | ---------------------- | -------------------------------------------- |
+| POST   | `/tax/compare`         | Calcula e salva o comparativo tributário     |
+| GET    | `/tax/comparisons`     | Lista os comparativos do usuário autenticado |
+| GET    | `/tax/comparisons/:id` | Busca um comparativo tributário específico   |
 
 ---
 
@@ -164,7 +228,8 @@ frontend/
     │
     ├── services/
     │   ├── authService.js
-    │   └── chatService.js
+    │   ├── chatService.js
+    │   └── taxService.js
     │
     ├── pages/
     │   ├── Landing.jsx
@@ -186,19 +251,38 @@ frontend/
     │       └── Chatbot.jsx
     │
     └── util/
-        ├── tax/
-        │   ├── index.js
-        │   ├── constants2026.js
-        │   ├── professions.js
-        │   ├── pf2026.js
-        │   ├── pjServicos2026.js
-        │   ├── pjAdvogado2026.js
-        │   ├── irpfProgressive2026.js
-        │   ├── compare.js
-        │   └── round.js
-        │
         └── pdf/
             └── gerarPdfResultado.js
+```
+
+---
+
+## Organização do frontend
+
+O frontend segue uma organização simples por responsabilidades:
+
+```txt
+Pages → controlam o fluxo das telas
+Components → exibem a interface
+Services → fazem chamadas HTTP para o backend
+Config → centraliza a instância do Axios
+Util → funções auxiliares, como geração de PDF
+```
+
+Na tela principal, o fluxo funciona assim:
+
+```txt
+CalculatorForm
+↓
+Home.jsx
+↓
+taxService.js
+↓
+POST /tax/compare
+↓
+CompareResult.jsx
+↓
+GraficoComparativo + PDF
 ```
 
 ---
@@ -207,10 +291,10 @@ frontend/
 
 ### Pré-requisitos
 
-- Node.js instalado.
-- Git instalado.
-- Backend DAF rodando localmente.
-- Docker e Docker Compose para o banco do backend.
+* Node.js instalado.
+* Git instalado.
+* Backend DAF rodando localmente.
+* Docker e Docker Compose para o banco do backend.
 
 ---
 
@@ -286,9 +370,11 @@ http://localhost:3000/api-docs
 3. Fazer login.
 4. Acessar a tela principal.
 5. Preencher renda, custos e profissão.
-6. Visualizar o comparativo PF × PJ.
-7. Gerar PDF do resultado.
-8. Usar o chatbot “Maurício” para tirar dúvidas.
+6. Enviar os dados para o backend.
+7. Visualizar o comparativo PF × PJ.
+8. Gerar PDF do resultado.
+9. Usar o chatbot “Maurício” para tirar dúvidas.
+10. Consultar o histórico pela API do backend, se necessário.
 
 ---
 
