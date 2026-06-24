@@ -3,6 +3,7 @@ import GraficoComparativo from './GraficoComparativo.jsx';
 import Text from './text.jsx';
 import Button from './button.jsx';
 import { gerarPDF } from '../util/pdf/gerarPdfResultado.js';
+import { compareTaxesRequest } from '../services/taxService';
 
 export default function CompareResult({ result, onBack }) {
   const [pdfLoading, setPdfLoading] = useState(false);

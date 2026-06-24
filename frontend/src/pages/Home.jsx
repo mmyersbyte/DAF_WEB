@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import CalculatorForm from '../components/CalculatorForm.jsx';
 import CompareResult from '../components/CompareResult.jsx';
 import FeatureCard from '../components/FeatureCard.jsx';
 import Text from '../components/text.jsx';
 import Button from '../components/button.jsx';
+
 import BusinessPlanAnimate from '../assets/business-plan-animate.svg?react';
 import TimePastIcon from '../assets/cards/time-past-svgrepo-com.svg?react';
 import DataIcon from '../assets/cards/data-svgrepo-com.svg?react';
+
 import FloatingChatBotButton from '../components/FloatingChatBotButton.jsx';
 import Chatbot from '../components/chatbot/Chatbot.jsx';
+
 import { logout } from '../services/authService';
-import { compareTaxes } from '../util/tax';
+import { compareTaxesRequest } from '../services/taxService.js';
 
 function FeatureIconWrap({ children }) {
   return (
@@ -37,21 +41,23 @@ function ShieldIcon() {
 export default function Home() {
   const [result, setResult] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
+
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  function handleLogout() {
     logout();
     navigate('/login');
-  };
+  }
+
   async function handleCompare(data) {
     try {
-      const result = await compareTaxesRequest({
+      const comparisonResult = await compareTaxesRequest({
         rendaMensal: data.rendaMensal,
         custosMensais: data.custosMensais,
         profissao: data.profissao,
       });
 
-      setResult(result);
+      setResult(comparisonResult);
     } catch (error) {
       console.error('Erro ao calcular comparativo:', error);
 
@@ -89,6 +95,7 @@ export default function Home() {
             >
               Calculadora Tributária
             </Text>
+
             <Text
               size='md'
               className='mt-1 text-gray-600'
@@ -96,6 +103,7 @@ export default function Home() {
               Compare PF e PJ de forma simples
             </Text>
           </div>
+
           <Button
             type='button'
             variant='secondary'
@@ -136,6 +144,7 @@ export default function Home() {
                     </span>
                     .
                   </Text>
+
                   <Text
                     size='md'
                     className='mt-3 max-w-xl text-gray-600'
@@ -157,10 +166,9 @@ export default function Home() {
                 className='relative flex justify-center lg:justify-end'
                 aria-hidden
               >
-                {/* Tamanho da ilustração: troque max-w-md por max-w-lg, max-w-xl, max-w-2xl ou max-w-[600px] */}
-
                 <div className='relative w-full max-w-lg'>
                   <div className='pointer-events-none absolute -right-6 -top-6 -z-10 h-48 w-48 rounded-full bg-primary-light/80 blur-2xl md:h-64 md:w-64' />
+
                   <div className='home-hero-svg'>
                     <BusinessPlanAnimate className='animated h-auto w-full max-w-full' />
                   </div>
@@ -178,6 +186,7 @@ export default function Home() {
                 title='Simulações rápidas'
                 description='Compare diferentes cenários em segundos.'
               />
+
               <FeatureCard
                 icon={
                   <FeatureIconWrap>
@@ -187,6 +196,7 @@ export default function Home() {
                 title='Decisão inteligente'
                 description='Escolha o regime tributário que oferece a maior economia.'
               />
+
               <FeatureCard
                 icon={
                   <FeatureIconWrap>
@@ -216,6 +226,7 @@ export default function Home() {
             aria-label='Fechar chat'
             onClick={() => setChatOpen(false)}
           />
+
           <div className='fixed bottom-0 right-0 z-[110] flex h-[min(85vh,640px)] w-full max-w-md flex-col overflow-hidden rounded-t-2xl border border-[var(--color-border)] bg-white shadow-2xl'>
             <Chatbot onClose={() => setChatOpen(false)} />
           </div>
